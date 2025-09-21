@@ -1,0 +1,24 @@
+<div class="flashcard">
+
+  <!-- الصورة -->
+  <div class="image-wrap">{{Image}}</div>
+
+  <!-- الكلمة -->
+  <span class="word">{{Word}}</span>
+
+  <!-- IPA + أيقونة الصوت -->
+  <div class="pron">
+    <span>{{IPA}}</span>
+    {{AudioWord}}
+  </div>
+
+</div>
+
+<script>
+  /* تفعيل طيّ الأقسام عند القلب (للوجه الخلفي أيضًا) */
+  document.querySelectorAll('section header').forEach(h=>{
+    h.onclick = () => h.parentElement.classList.toggle('collapsed');
+  });
+</script>
+
+

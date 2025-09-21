@@ -1,0 +1,11 @@
+<!-- (2) الواجهة الأمامية للبطاقة 2 -->
+<div class="flashcard">
+  <div class="image-wrap">{{Image}}</div>
+  <span class="word">{{Translation}}</span>
+</div>
+
+<script>
+  document.querySelectorAll('section header').forEach(h=>{
+    h.onclick = () => h.parentElement.classList.toggle('collapsed');
+  });
+</script>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>بطاقة تعليمية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --beige: #f4f2ee;
+      --beige-light: #faf9f7;
+      --teal: #0e506a;
+      --sienna: #ab6a2a;
+      --radius: 18px;
+      --shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+      --transition-speed: 0.4s;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background: var(--beige);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .flashcard {
+      width: 90%;
+      max-width: 720px;
+      background: var(--beige-light);
+      border: 2px solid var(--sienna);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .word {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--teal);
+    }
+
+    .pron {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    /* Fixed 3×2 grid layout */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, minmax(100px, auto));
+      gap: 12px;
+      width: 100%;
+    }
+
+    /* Base styles for info boxes */
+    .info-box {
+      background: #fff;
+      border: 1px solid var(--teal);
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      
+      /* Flexbox for internal content */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-box:hover {
+      background: var(--beige);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header section with icon and title */
+    .info-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .info-icon img {
+      width: 40px;
+      height: 40px;
+      transition: transform var(--transition-speed) ease;
+    }
+
+    .info-title {
+      font-weight: bold;
+      color: var(--teal);
+      margin-top: 8px;
+      transition: all var(--transition-speed) ease;
+    }
+
+    /* Content section */
+    .content {
+      font-size: 0.85rem;
+      color: #444;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      width: 100%;
+      margin-top: 0;
+      transition: all var(--transition-speed) ease;
+      
+      /* Flex to organize content vertically */
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Styles for open state - expanding within its grid cell */
+    .info-box.open {
+      z-index: 10;
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .info-box.open .info-icon img {
+      transform: scale(1.2);
+    }
+
+    .info-box.open .content {
+      max-height: 200px;
+      opacity: 1;
+      margin-top: 8px;
+      overflow-y: auto;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, minmax(100px, auto));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .info-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(6, minmax(100px, auto));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="flashcard">
+    <div class="word">{{Word}}</div>
+    <div class="pron">
+      <span>{{IPA}}</span>
+      {{AudioWord}}
+    </div>
+
+    <div class="info-grid">
+      <!-- مثال -->
+      <div class="info-box">
+        <div class="info-header">
+          <div class="info-icon"><img src="icons/example.png" alt="مثال"></div>
+          <div class="info-title">مثال</div>
+        </div>
+        <div class="content">
+          <p><em> <span class="tts-target">{{ExampleEN}}</span></em></p>
+          <p>{{ExampleAR}}</p>
+          {{AudioSentence}}
+        </div>
+      </div>
+
+      <!-- القواعد -->
+      <div class="info-box">
+        <div class="info-header">
+          <div class="info-icon"><img src="icons/grammar.png" alt="القواعد"></div>
+          <div class="info-title">القواعد</div>
+        </div>
+        <div class="content">{{Grammar}}</div>
+      </div>
+
+      <!-- التعريف -->
+     <div class="info-box">
+  <div class="info-header">
+    <div class="info-icon"><img src="icons/definition.png" alt="التعريف"></div>
+    <div class="info-title">التعريف</div>
+  </div>
+  <div class="content">
+    <p><strong>EN:</strong> <span class="tts-target">{{DefinitionEN}}</span></p>
+    <p><strong>AR:</strong> {{DefinitionAR}}</p>
+  </div>
+</div>
+
+      <!-- مرادفات -->
+      <div class="info-box">
+        <div class="info-header">
+          <div class="info-icon"><img src="icons/synonym.png" alt="مرادفات"></div>
+          <div class="info-title">مرادفات</div>
+        </div>
+        <div class="content">{{Synonyms}}</div>
+      </div>
+
+      <!-- مشتقات -->
+      <div class="info-box">
+        <div class="info-header">
+          <div class="info-icon"><img src="icons/derivatives.png" alt="مشتقات"></div>
+          <div class="info-title">مشتقات</div>
+        </div>
+        <div class="content">{{Derivatives}}</div>
+      </div>
+
+      <!-- تعبيرات -->
+      <div class="info-box">
+        <div class="info-header">
+          <div class="info-icon"><img src="icons/expressions.png" alt="تعبيرات"></div>
+          <div class="info-title">تعبيرات</div>
+        </div>
+        <div class="content">{{Idioms}}</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.info-box').forEach(box => {
+      box.addEventListener('click', () => {
+        // Toggle the clicked box
+        box.classList.toggle('open');
+      });
+    });
+  </script>
+<script>
+function speakText(text) {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    speechSynthesis.speak(utterance);
+  } else {
+    alert("نطق النص غير مدعوم في هذا المتصفح");
+  }
+}
+
+function addTTSButtons() {
+  document.querySelectorAll('.tts-target').forEach(elem => {
+    if (!elem.classList.contains('tts-ready')) {
+      const text = elem.textContent.trim();
+      const button = document.createElement('button');
+      button.textContent = '🔊';
+      button.style.marginLeft = '5px';
+      button.style.border = 'none';
+      button.style.background = 'none';
+      button.style.cursor = 'pointer';
+      button.onclick = () => speakText(text);
+      elem.after(button);
+      elem.classList.add('tts-ready');
+    }
+  });
+}
+
+addTTSButtons();
+</script>
+
+</body>
+</html>
